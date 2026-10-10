@@ -10,7 +10,7 @@ m, c = np.polyfit(X, Y, 1)
 
 # Expected / predicted temperature
 
-Y_pred m * X + c
+Y_pred = m * X + c
 
 print("Slope (m)", m)
 
