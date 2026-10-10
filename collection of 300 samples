@@ -1,0 +1,39 @@
+import time
+import glob
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Find built-in Zynq temperature sensor
+temp_file = glob.glob(
+    '/sys/bus/iio/devices/iio:device*/in_temp0_raw'
+)[0]
+
+scale_file = temp_file.replace('_raw', '_scale')
+offset_file = temp_file.replace('_raw', '_offset')
+
+# Read calibration values
+scale = float(open(scale_file).read())
+offset = float(open(offset_file).read())
+
+# Arrays for 300 samples
+time_data = []
+temperature_data = []
+
+print("Collecting 300 temperature samples...\n")
+
+for i in range(300):
+    
+    # Read raw temperature
+    raw = int(open(temp_file).read())
+    
+    # Convert raw value to Celsius
+    temperature = (raw + offset) * scale / 1000.0
+    
+    time_data.append(i)
+    temperature_data.append(temperature)
+    
+    print("Sample {:3d} : {:.2f} °C".format(i + 1, temperature))
+    
+    time.sleep(1)
+
+print("\n300 samples collected successfully!")
